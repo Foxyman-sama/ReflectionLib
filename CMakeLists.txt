@@ -4,10 +4,12 @@ project(ReflectionLib)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 
-option(USE_COROUTINE "Coroutine support" OFF)
+option(USE_COROUTINE "Coroutine support" ON)
 option(TEST_ENABLE "Test" OFF)
 
-configure_file(config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h)
+configure_file(networkcfg.hpp.in 
+	${CMAKE_CURRENT_SOURCE_DIR}/include/network/networkcfg.hpp
+)
 
 find_package(Boost)
 if (Boost_FOUND) 
@@ -18,33 +20,37 @@ else ()
 	set(Boost_LIBS "D:/Git/vcpkg/installed/x64-windows/lib")
 endif ()
 
-if (USE_COROUTINE) 
-	set(INCLUDE_DIR "async")
-else ()
-	set(INCLUDE_DIR "sync")
-endif ()
-
 list(APPEND INCLUDE 
 	# Helpful
-	include/${INCLUDE_DIR}/definitions.hpp
-	# Transfer
-	include/${INCLUDE_DIR}/transfer/isender.hpp
-	include/${INCLUDE_DIR}/transfer/sender.hpp
-	include/${INCLUDE_DIR}/transfer/ireceiver.hpp
-	include/${INCLUDE_DIR}/transfer/receiver.hpp
+	include/definitions.hpp
 	# Connection
-	include/${INCLUDE_DIR}/connection/iconnection.hpp
-	include/${INCLUDE_DIR}/connection/connection.hpp
-	include/${INCLUDE_DIR}/connection/iacceptor.hpp
-	include/${INCLUDE_DIR}/connection/acceptor.hpp
+	include/network/connection/iconnection.hpp
+	include/network/connection/connection.hpp
+	include/network/connection/iacceptor.hpp
+	include/network/connection/acceptor.hpp
+	# Transfer
+	include/network/transfer/isender.hpp
+	include/network/transfer/sender.hpp
+	include/network/transfer/ireceiver.hpp
+	include/network/transfer/receiver.hpp
+	# Input 	
+	include/system/input/iinput.hpp
+	include/system/input/inputfile.hpp
+	# Output 	
+	include/system/output/ioutput.hpp
+	include/system/output/outputfile.hpp
 )
 list(APPEND SRC 
 	# Transfer
-	src/${INCLUDE_DIR}/transfer/sender.cpp
-	src/${INCLUDE_DIR}/transfer/receiver.cpp
+	src/network/transfer/sender.cpp
+	src/network/transfer/receiver.cpp
 	# Connection
-	src/${INCLUDE_DIR}/connection/connection.cpp
-	src/${INCLUDE_DIR}/connection/acceptor.cpp
+	src/network/connection/connection.cpp
+	src/network/connection/acceptor.cpp
+	# Input 
+	src/system/input/inputfile.cpp
+	# Output 
+	src/system/output/outputfile.cpp
 )
 
 add_library(ReflectionLib STATIC
