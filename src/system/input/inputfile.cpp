@@ -1,7 +1,7 @@
 #include "../../../include/system/input/inputfile.hpp"
 
 #ifdef USE_COROUTINE
-Awaitable<Data> read(const std::string &_k_path) noexcept {
+Awaitable<Data> InputFile::read(const std::string &_k_path) noexcept {
     std::ifstream fin { _k_path, std::ios_base::binary };
     fin.seekg(0, fin.end);
 
@@ -14,7 +14,7 @@ Awaitable<Data> read(const std::string &_k_path) noexcept {
     co_return data;
 }
 #else 
-Data read(const std::string &_k_path) noexcept {
+Data InputFile::read(const std::string &_k_path) noexcept {
     std::ifstream fin { _k_path, std::ios_base::binary };
     fin.seekg(0, fin.end);
 

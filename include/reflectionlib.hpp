@@ -11,5 +11,8 @@
 #include "network/transfer/receiver.hpp"
 #include "network/transfer/isender.hpp"
 #include "network/transfer/sender.hpp"
+// I/O
+#include "system/input/inputfile.hpp"
+#include "system/output/outputfile.hpp"
 
 #endif
