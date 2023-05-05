@@ -1,24 +1,22 @@
 #include <iostream>
 #include "../include/reflectionlib.hpp"
 
-AwaitVoid acceptTest() {
+Awaitable<void> acceptTest() {
     try {
         std::shared_ptr<IAcceptor> p_acceptor { std::make_shared<Acceptor>() };
-        SocketPtr p_socket { co_await p_acceptor->accept(ConstEndpoint { TCP::v4(), 9090 }) };
+        SocketPtr p_socket { co_await p_acceptor->accept(Endpoint { TCP::v4(), 9090 }) };
         std::cout << "acceptTest(): " << p_socket->remote_endpoint() << '\n';
         for (size_t i { }; i < 100; ++i) {
             std::shared_ptr<ISender> p_sender { std::make_shared<Sender>() };
-            Data data { };
-            data.resize(10'000'000, 'l');
-            data.emplace_back('\0');
+            Data data { 100'000'000, 'l' };
             co_await p_sender->send(p_socket, data);
+            std::cout << "acceptTest(): send data SUCCESS!\n";
 
             std::shared_ptr<IReceiver> p_receiver { std::make_shared<Receiver>() };
             auto result { co_await p_receiver->receive(p_socket) };
             for (auto &&el : result) {
-                if ((el != 'l') && (el != '\0')) {
-                    std::cerr << "acceptTest(): receive data FAILED!\n";
-                    co_return;
+                if (el != 'l') {
+                    throw std::exception { "acceptTest(): receive data ERROR!" };
                 }
             }
 
@@ -29,20 +27,19 @@ AwaitVoid acceptTest() {
         std::cerr << k_e.what() << '\n';
     }
 }
-AwaitVoid connectTest() {
+Awaitable<void> connectTest() {
     try {
         std::shared_ptr<IConnection> p_connector { std::make_shared<Connection>() };
         SocketPtr p_socket {
-            co_await p_connector->connect(ConstEndpoint { Address::from_string("127.0.0.1"), 9090 })
+            co_await p_connector->connect(Endpoint { Address::from_string("127.0.0.1"), 9090 })
         };
         std::cout << "connectTest(): " << p_socket->remote_endpoint() << '\n';
         for (size_t i { }; i < 100; ++i) {
             std::shared_ptr<IReceiver> p_receiver { std::make_shared<Receiver>() };
-            auto result { co_await p_receiver->receive(p_socket) };
+            auto result { co_await p_receiver->receive(p_socket) }; 
             for (auto &&el : result) {
-                if ((el != 'l') && (el != '\0')) {
-                    std::cerr << "connectTest(): receive data FAILED!\n";
-                    co_return;
+                if (el != 'l') {
+                    throw std::exception { "connectTest(): receive data ERROR!" };
                 }
             }
 
@@ -50,6 +47,8 @@ AwaitVoid connectTest() {
 
             std::shared_ptr<ISender> p_sender { std::make_shared<Sender>() };
             co_await p_sender->send(p_socket, result);
+
+            std::cout << "connectTest(): send data SUCCESS!\n";
         }
     }
     catch (const std::exception &k_e) {

@@ -7,9 +7,9 @@ class Connection
     : public IConnection {
 public:
 #ifdef USE_COROUTINE
-    virtual AwaitSPtr connect(ConstEndpoint _k_endpoint) override;
+    Awaitable<SocketPtr> connect(const Endpoint &_k_endpoint) override;
 #else 
-    virtual SocketPtr connect(ConstEndpoint _k_endpoint) override;
+    SocketPtr connect(const Endpoint &_k_endpoint) override;
 #endif
 };
 

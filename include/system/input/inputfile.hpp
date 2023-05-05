@@ -7,9 +7,9 @@ class InputFile
     : public IInput {
 public:
 #ifdef USE_COROUTINE
-    virtual Awaitable<Data> read(const std::string &_k_path) noexcept override;
+    Awaitable<Data> read(const std::string &_k_path) noexcept override;
 #else 
-    virtual Data read(const std::string &_k_path) noexcept override;
+    Data read(const std::string &_k_path) noexcept override;
 #endif
 };
 

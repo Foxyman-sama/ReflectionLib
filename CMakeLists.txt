@@ -5,10 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 
 option(USE_COROUTINE "Coroutine support" ON)
-option(TEST_ENABLE "Test" OFF)
+option(TEST_ENABLE "Test" ON)
 
 configure_file(networkcfg.hpp.in 
-	${CMAKE_CURRENT_SOURCE_DIR}/include/network/networkcfg.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/include/networkcfg.hpp
 )
 
 find_package(Boost)
@@ -16,13 +16,20 @@ if (Boost_FOUND)
 	set(Boost_DIRS ${Boost_INCLUDE_DIRS})
 	set(Boost_LIBS ${Boost_LIBRARIES})
 else ()	
-	set(Boost_DIRS "D:/Git/vcpkg/installed/x64-windows/include")
-	set(Boost_LIBS "D:/Git/vcpkg/installed/x64-windows/lib")
+	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(Boost_DIRS "D:/Git/vcpkg/installed/x64-windows/include")
+		set(Boost_LIBS "D:/Git/vcpkg/installed/x64-windows/lib")
+	else ()	
+		set(Boost_DIRS "D:/Git/vcpkg/installed/x86-windows/include")
+		set(Boost_LIBS "D:/Git/vcpkg/installed/x86-windows/lib")
+	endif ()
 endif ()
 
 list(APPEND INCLUDE 
 	# Helpful
 	include/definitions.hpp
+	# Data 
+	include/data.hpp
 	# Connection
 	include/network/connection/iconnection.hpp
 	include/network/connection/connection.hpp
@@ -41,6 +48,8 @@ list(APPEND INCLUDE
 	include/system/output/outputfile.hpp
 )
 list(APPEND SRC 
+	# Data
+	src/data.cpp
 	# Transfer
 	src/network/transfer/sender.cpp
 	src/network/transfer/receiver.cpp

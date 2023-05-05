@@ -6,11 +6,11 @@
 class ISender {
 public:
 #ifdef USE_COROUTINE
-    virtual AwaitVoid send(SocketPtr _p_socket,
-                           ConstData _k_data) = 0;
+    virtual Awaitable<void> send(SocketPtr _p_socket,
+                                 const Data &_k_data) = 0;
 #else 
     virtual void send(SocketPtr _p_socket,
-                      ConstData _k_data) = 0;
+                      const Data &_k_data) = 0;
 #endif
 };
 

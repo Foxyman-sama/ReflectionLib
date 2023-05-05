@@ -7,11 +7,11 @@ class Sender
     : public ISender {
 public:
 #ifdef USE_COROUTINE
-    virtual AwaitVoid send(SocketPtr _p_socket,
-                           ConstData _k_data) override;
+    Awaitable<void> send(SocketPtr _p_socket,
+                         const Data &_k_data) override;
 #else 
-    virtual void send(SocketPtr _p_socket,
-                      ConstData _k_data) override;
+    void send(SocketPtr _p_socket,
+              const Data &_k_data) override;
 #endif
 };
 

@@ -1,5 +1,5 @@
-#ifndef REFLECTIONLIBREFLECTION_HPP
-#define REFLECTIONLIBREFLECTION_HPP
+#ifndef REFLECTIONLIB_HPP
+#define REFLECTIONLIB_HPP
 
 // Connection libraries
 #include "network/connection/iacceptor.hpp"
@@ -12,7 +12,9 @@
 #include "network/transfer/isender.hpp"
 #include "network/transfer/sender.hpp"
 // I/O
+#include "system/input/iinput.hpp"
 #include "system/input/inputfile.hpp"
+#include "system/output/ioutput.hpp"
 #include "system/output/outputfile.hpp"
 
 #endif

@@ -7,11 +7,11 @@ class OutputFile
     : public IOutput {
 public:
 #ifdef USE_COROUTINE
-    virtual AwaitVoid write(const std::string &_k_path,
-                            ConstData _k_data) noexcept override;
+    Awaitable<void> write(const std::string &_k_path,
+                          const Data &_k_data) noexcept override;
 #else 
-    virtual void write(const std::string &_k_path,
-                       ConstData _k_data) noexcept override;
+    void write(const std::string &_k_path,
+               const Data &_k_data) noexcept override;
 #endif
 };
 

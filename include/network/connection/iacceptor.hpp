@@ -6,9 +6,9 @@
 class IAcceptor {
 public:
 #ifdef USE_COROUTINE
-    virtual AwaitSPtr accept(ConstEndpoint _k_endpoint) = 0;
+    virtual Awaitable<SocketPtr> accept(const Endpoint &_k_endpoint) = 0;
 #else 
-    virtual SocketPtr accept(ConstEndpoint _k_endpoint) = 0;
+    virtual SocketPtr accept(const Endpoint &_k_endpoint) = 0;
 #endif
 };
 
